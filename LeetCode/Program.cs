@@ -1,4 +1,6 @@
-﻿using System.Numerics;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Numerics;
+using System.Security.Principal;
 using System.Text;
 
 
@@ -625,6 +627,20 @@ public class Solution
         //unsolved
     }
 
+    public int MaxDepth(string s)
+    {
+        int n = s.Length;
+        int count = 0;
+        int max = Int32.MinValue;
+        for(int i =0;i < n;i++)
+        {
+            if (s[i] == '(') count++;
+            if (s[i] == ')') count--;
+            if(count > max) max = count;
+        }
+        return max;
+    }
+
     public IList<string> LetterCombinations(string digits)
     {
         IList<string> result = new List<string>();
@@ -965,16 +981,16 @@ public class Solution
     }
     public int FirstMissingPositive(int[] nums)
     {
-        int[] ints = new int[nums.Length+1];
+        int[] ints = new int[nums.Length + 1];
         int result = 1;
-        for(int i =0; i < nums.Length;i++)
+        for (int i = 0; i < nums.Length; i++)
         {
             if (nums[i] > nums.Length || nums[i] < 1)
                 continue;
             else
                 ints[nums[i]] = 1;
         }
-        for(int i =1;i < ints.Length;i++)
+        for (int i = 1; i < ints.Length; i++)
         {
             if (ints[i] == 0)
             {
@@ -987,7 +1003,55 @@ public class Solution
         return result;
 
     }
+    public int FindNonMinOrMax(int[] nums)
+    {
+        int min = int.MaxValue;
+        int max = 0;
+        int i = 0;
+        for (i = 0; i < nums.Length; i++)
+        {
+            if (nums[i] > max) max = nums[i];
+            if (nums[i] < min) min = nums[i];
+        }
+        i = 0;
+        while (i < nums.Length)
+        {
+            if (nums[i] < max && nums[i] > min)
+            {
+                return nums[i];
+            }
+            else
+            {
+                i++;
+            }
+        }
+        return -1;
+    }
 
+    public int? MaximumJumps(int[] nums, int target)
+    {
+        int jump = 0;
+        int left = 0;
+        int right = nums.Length - 1;
+        return null;
+    }
+
+    //public IList<string> GenerateParenthesis(int n)
+    //{
+    //    IList<string> result = new List<string>();
+    //    int closeNeed = 0;
+    //    int pairLeft = n;
+    //    Stack<char> chars = new Stack<char>();
+    //    while(pairLeft != 0)
+    //    {
+
+    //    }
+    //}
+    public bool CheckRecord(string s)
+    {
+        return (s.Count(e => e=='A') < 2 && !s.Contains("LLL")) ;
+        
+    }
     public static void Main()
     {
         //drive code for ugly 1
@@ -1028,8 +1092,8 @@ public class Solution
         //int result = solution.SingleNumber(k);
         //k = k.Distinct().ToArray();
         //foreach (int i in k) { Console.WriteLine(i); }
-        int[] test = { 4, 3, 2, 7, 8, 2, 3, 1 };
-        IList<int> nums = solution.FindDuplicates(test);
+        int[] test = { 2, 1, 5, 6, 2, 3 };
+        Console.WriteLine();
 
     }
 }

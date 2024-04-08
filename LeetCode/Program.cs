@@ -1,6 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using System.Numerics;
-using System.Security.Principal;
+﻿using System.Numerics;
 using System.Text;
 
 
@@ -632,11 +630,11 @@ public class Solution
         int n = s.Length;
         int count = 0;
         int max = Int32.MinValue;
-        for(int i =0;i < n;i++)
+        for (int i = 0; i < n; i++)
         {
             if (s[i] == '(') count++;
             if (s[i] == ')') count--;
-            if(count > max) max = count;
+            if (count > max) max = count;
         }
         return max;
     }
@@ -1030,8 +1028,6 @@ public class Solution
 
     public int? MaximumJumps(int[] nums, int target)
     {
-        int jump = 0;
-        int left = 0;
         int right = nums.Length - 1;
         return null;
     }
@@ -1049,8 +1045,109 @@ public class Solution
     //}
     public bool CheckRecord(string s)
     {
-        return (s.Count(e => e=='A') < 2 && !s.Contains("LLL")) ;
-        
+        return (s.Count(e => e == 'A') < 2 && !s.Contains("LLL"));
+
+    }
+    public static int Factorial(int nums)
+    {
+        int result = 1;
+        for (int i = 1; i <= nums; i++)
+        {
+            result = result * i;
+        }
+        return result;
+    }
+    public static int Reverse(int num)
+    {
+        int index = 0;
+        int k = 0;
+        while (num != 0)
+        {
+            k += (int)Math.Pow(10, index) * (num % 10);
+            num /= 10;
+            index++;
+        }
+        return k;
+    }
+    public int CountNicePairs(int[] nums)
+    {
+        int count = 0;
+        Dictionary<int, int> dict = new Dictionary<int, int>();
+        foreach (int e in nums)
+        {
+            if (dict.ContainsKey(e - Reverse(e))) dict[e - Reverse(e)]++;
+            else
+            {
+                dict.Add(e - Reverse(e), 1);
+            }
+        }
+        foreach (var e in dict)
+        {
+            if (e.Value >= 2)
+            {
+                count += Factorial(e.Value) / (2 * Factorial(e.Value - 2));
+            }
+        }
+        return count; //unsolve
+    }
+    public string MinRemoveToMakeValid(string s)
+    {
+        int count = 0;
+        for (int i = 0; i < s.Length; i++)
+        {
+            if (s[i] == '(') count++;
+            if (s[i] == ')')
+            {
+                count--;
+                if (count < 0)
+                {
+                    s = s.Remove(i, 1);
+                    count = 0;
+                }
+                Console.WriteLine(s);
+
+            }
+        }
+        count = 0;
+        for (int i = s.Length - 1; i >= 0; i--)
+        {
+            if (s[i] == ')') count++;
+            if (s[i] == '(')
+            {
+                count--;
+                if (count < 0)
+                {
+                    s = s.Remove(i, 1);
+                    count = 0;
+                    Console.WriteLine(s);
+                }
+
+            }
+        }
+        return s;
+    }
+    public static int CountStudents(int[] students, int[] sandwiches)
+    {
+        Queue<int> studentQueue = new Queue<int>(students);
+        Queue<int> sandwichQueue = new Queue<int>(sandwiches);
+        while (studentQueue.Count > 0)
+        {
+            if (studentQueue.Peek() == sandwichQueue.Peek())
+            {
+                studentQueue.Dequeue();
+                sandwichQueue.Dequeue();
+            }
+            else
+            {
+                int temp = studentQueue.Peek();
+                studentQueue.Dequeue();
+                studentQueue.Enqueue(temp);
+            }
+            if (sandwichQueue.Count == 0 || !studentQueue.Contains(sandwichQueue.Peek()))
+                break;
+
+        }
+        return sandwichQueue.Count;
     }
     public static void Main()
     {
@@ -1092,8 +1189,12 @@ public class Solution
         //int result = solution.SingleNumber(k);
         //k = k.Distinct().ToArray();
         //foreach (int i in k) { Console.WriteLine(i); }
-        int[] test = { 2, 1, 5, 6, 2, 3 };
-        Console.WriteLine();
-
+        //int[] test = { 1222, 2111, 50, 60, 276, 307 };
+        //foreach(int i in test)
+        //{
+        //    Console.WriteLine(Reverse(i).ToString());
+        //}
+        int res = Solution.CountStudents(new int[] { 1, 1, 1, 0, 0, 1 }, new int[] { 1, 0, 0, 0, 1, 1 });
+        Console.WriteLine(res);
     }
 }

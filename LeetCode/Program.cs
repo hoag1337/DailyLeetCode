@@ -1,6 +1,5 @@
-﻿using System.Collections;
-using System.Net.WebSockets;
-using System.Numerics;
+﻿using System.Numerics;
+using System.Security.Principal;
 using System.Text;
 
 
@@ -880,32 +879,7 @@ public class Solution
         }
         return true;
     }
-    public int MinSubArrayLen(int target, int[] nums)
-    {
-        int sum = 0;
-        for (int t = 0; t < nums.Length; t++)
-        {
-            if (nums[t] >= target) return 1;
-            sum += nums[t];
-        }
-        if (target > sum) return 0;
-        int min = Int32.MaxValue;
-        sum = 0;
-        int start = 0;
-        int i = 0;
-        while (start < nums.Length)
-        {
-            sum += nums[i];
-            if (sum >= target && i - start < min)
-            {
-                min = i - start;
-                start++;
-                sum -= nums[start];
-            }
-            else i++;
-        }
-        return min;
-    }
+    
     public bool CheckPossibility(int[] nums)
     {
         int temp = nums[0];
@@ -1158,14 +1132,14 @@ public class Solution
         int closeLeft = 0;
 
         int starCount = 0;
-        for(int i =0; i < s.Length; i++)
+        for (int i = 0; i < s.Length; i++)
         {
             if (s[i] == '(') closeLeft++;
             if (s[i] == ')') closeLeft--;
-            if (s[i] =='*') starCount++;
+            if (s[i] == '*') starCount++;
             countCloseLeft[i] = closeLeft;
         }
-        for(int i = countCloseLeft.Length - 1;i >=0; i--)
+        for (int i = countCloseLeft.Length - 1; i >= 0; i--)
         {
             if (s[i] == '*')
             {
@@ -1176,88 +1150,109 @@ public class Solution
     }
     public int TimeRequiredToBuy(int[] tickets, int k)
     {
-            int i = 0;
-            int count = 0;
-            while (tickets[k] !=0)
-            {
-                if (i == tickets.Length - 1)
-                {
-                    if (tickets[i] ==0)
-                    {
-                        i = 0;
-                    }
-                    else
-                    {
-                        tickets[i]--;
-                        count++;
-                        i = 0;
-                    }
-                }
-                else
-                {
-                    if (tickets[i]==0)
-                    {
-                        i++;
-                    }
-                    else
-                    {
-                        tickets[i]--;
-                        count++;
-                        i++;
-                    }
-                }
-            
-            
-            
-            }
-            return count;
+        //int i = 0;
+        //int count = 0;
+        //while (tickets[k] !=0)
+        //{
+        //    if (i == tickets.Length - 1)
+        //    {
+        //        if (tickets[i] ==0)
+        //        {
+        //            i = 0;
+        //        }
+        //        else
+        //        {
+        //            tickets[i]--;
+        //            count++;
+        //            i = 0;
+        //        }
+        //    }
+        //    else
+        //    {
+        //        if (tickets[i]==0)
+        //        {
+        //            i++;
+        //        }
+        //        else
+        //        {
+        //            tickets[i]--;
+        //            count++;
+        //            i++;
+        //        }
+        //    }
+
+
+
+        //}
+        int count = 0;
+        for (int i = 0; i < tickets.Length; i++)
+        {
+            if (i < k) count += tickets[i] > tickets[k] ? tickets[k] : tickets[i];
+            if (i == k) count += tickets[k];
+            if (i > k) count += tickets[i] >= tickets[k] ? tickets[k] - 1 : tickets[i];
+        }
+        return count;
     }
+    public int Search(int[] nums, int target)
+    {
+        int leftPointer = 0;
+        int rightPointer = nums.Length - 1;
+        if (nums[leftPointer] > nums[rightPointer])
+        {
+            if (target < leftPointer)
+            {
+                while (rightPointer > leftPointer)
+                {
+                    if (nums[rightPointer] == target)
+                        return rightPointer;
+                    else rightPointer--;
+                }
+            }
+            else if (target > leftPointer)
+                while (rightPointer > leftPointer)
+                {
+                    if (nums[leftPointer] == target) return leftPointer;
+                    else leftPointer++;
+                }
+
+        }
+        else
+        {
+            while (leftPointer < nums.Length)
+            {
+                if (nums[leftPointer] == target)
+                    return leftPointer;
+                else leftPointer++;
+            }
+        }
+        return -1;
+    }
+    public bool SearchMatrix(int[][] matrix, int target)
+    {
+        int m = matrix.Length;
+        int n = matrix[0].Length;
+        for (int i = n - 1; i >= 0; i--)
+        {
+            if (matrix[0][i] == target) return true;
+            if (matrix[0][i] > target)
+                continue;
+            if (matrix[0][i] < target)
+            {
+                for (int j = 1; j < m; j++)
+                {
+                    if (matrix[j][i] == target) return true;
+                }
+            }
+        }
+        return false;
+    }
+
     public static void Main()
     {
-        //drive code for ugly 1
-        /*        int m = Convert.ToInt32(Console.ReadLine());
-                Console.WriteLine(s.IsUgly(m));*/
-
-        //drive code for SortArrayByParity
-        /*Console.Write("Array size:");
-        int n = Convert.ToInt32(Console.ReadLine());
-        int[] array = new int[n];
-        for(int i=0;i<n;i++)
-        {
-            array[i] = Convert.ToInt32(Console.ReadLine());
-        }
-        int[] array2 = solution.SortArrayByParity(array);
-        for(int i=0;i<n;i++)
-        {
-            Console.WriteLine(array2[i]);
-        }
-    }*/
-        /*int n = Convert.ToInt32(Console.ReadLine());
-        int[] array = new int[n];
-        for (int i = 0; i < n; i++)
-        {
-            array[i] = Convert.ToInt32(Console.ReadLine());
-        }
-        Console.WriteLine(  solution.SingleNumber(array));*/
-        /*int[] arr = new int[] { 2, 4, 1, 2, 7, 8 };*/
-        //int[] test = { 10, 2, 5, 2, 3, 4, 3, 4, 7, 2 };
+        
 
         Solution solution = new Solution();
-        /*int k = solution.NumberOfBeams(new string [] { "00000100000000100000001000010000000000000000000000000001010000000000010000000101011000010001000010001000000001000000010110000100000001000100000000000000000001000000000000000000000000000000010000000000000010000000110000001000000000001000000000000000011011110000000000000000010000000000001000000000001000000000000000100000000100000100000000000000000001000000000000000001000000000000000000001001001010000000010000000100000000000000000000000101010000011001000000000000000000010100000001000101100001100111" });
-        Console.WriteLine( k );*/
-        // int k = solution.PlusOne(Convert.ToInt32(Console.ReadLine()));
-        //int k = solution.LengthOfLongestSubstring("nz");
-        //Console.WriteLine("result" + k);
-        //int[] k = { 0, 9, 8, 9, 0 };
-        //int result = solution.SingleNumber(k);
-        //k = k.Distinct().ToArray();
-        //foreach (int i in k) { Console.WriteLine(i); }
-        //int[] test = { 1222, 2111, 50, 60, 276, 307 };
-        //foreach(int i in test)
-        //{
-        //    Console.WriteLine(Reverse(i).ToString());
-        //}
-        int res = solution.TimeRequiredToBuy(new int[] { 2,3,2 },2);
+        int res = solution.MinSubArrayLen(213, new int[] { 12, 28, 83, 4, 25, 26, 25, 2, 25, 25, 25, 12 });
         Console.WriteLine(res);
     }
 }

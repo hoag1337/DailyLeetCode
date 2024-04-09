@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿using System.Collections.Generic;
+using System.Numerics;
 using System.Security.Principal;
 using System.Text;
 
@@ -1246,13 +1247,37 @@ public class Solution
         }
         return false;
     }
+    public IList<int> MajorityElement(int[] nums)
+    {
+        List<int> result = new List<int>();
+        Dictionary<int, int> dict = new Dictionary<int, int>();
+        foreach(int x in nums)
+        {
+            if(!dict.ContainsKey(x))
+            {
+                dict[x] = 1;
+            }
+            else
+            {
+                dict[x]++;
+            }
+        }
+        result.AddRange(dict.Where(kv => kv.Value > nums.Length / 3)
+            .Select(kv => kv.Key)
+            .ToList());
+        return result;
+    }
 
     public static void Main()
     {
         
 
         Solution solution = new Solution();
-        int res = solution.MinSubArrayLen(213, new int[] { 12, 28, 83, 4, 25, 26, 25, 2, 25, 25, 25, 12 });
-        Console.WriteLine(res);
+        int[] nums = new int[] {1,2 };
+        IList<int> result = solution.MajorityElement(nums);
+        foreach(var x in result)
+        {
+            Console.WriteLine(x);
+        }
     }
 }

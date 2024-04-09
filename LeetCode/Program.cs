@@ -1,4 +1,6 @@
-﻿using System.Numerics;
+﻿using System.Collections;
+using System.Net.WebSockets;
+using System.Numerics;
 using System.Text;
 
 
@@ -1149,6 +1151,67 @@ public class Solution
         }
         return sandwichQueue.Count;
     }
+    public bool CheckValidString(string s)
+    {
+        int[] countCloseLeft = new int[s.Length];
+
+        int closeLeft = 0;
+
+        int starCount = 0;
+        for(int i =0; i < s.Length; i++)
+        {
+            if (s[i] == '(') closeLeft++;
+            if (s[i] == ')') closeLeft--;
+            if (s[i] =='*') starCount++;
+            countCloseLeft[i] = closeLeft;
+        }
+        for(int i = countCloseLeft.Length - 1;i >=0; i--)
+        {
+            if (s[i] == '*')
+            {
+                if (countCloseLeft[i] > 0) return true;
+            }
+        }
+        return false;
+    }
+    public int TimeRequiredToBuy(int[] tickets, int k)
+    {
+            int i = 0;
+            int count = 0;
+            while (tickets[k] !=0)
+            {
+                if (i == tickets.Length - 1)
+                {
+                    if (tickets[i] ==0)
+                    {
+                        i = 0;
+                    }
+                    else
+                    {
+                        tickets[i]--;
+                        count++;
+                        i = 0;
+                    }
+                }
+                else
+                {
+                    if (tickets[i]==0)
+                    {
+                        i++;
+                    }
+                    else
+                    {
+                        tickets[i]--;
+                        count++;
+                        i++;
+                    }
+                }
+            
+            
+            
+            }
+            return count;
+    }
     public static void Main()
     {
         //drive code for ugly 1
@@ -1194,7 +1257,7 @@ public class Solution
         //{
         //    Console.WriteLine(Reverse(i).ToString());
         //}
-        int res = Solution.CountStudents(new int[] { 1, 1, 1, 0, 0, 1 }, new int[] { 1, 0, 0, 0, 1, 1 });
+        int res = solution.TimeRequiredToBuy(new int[] { 2,3,2 },2);
         Console.WriteLine(res);
     }
 }

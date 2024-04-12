@@ -1267,17 +1267,131 @@ public class Solution
             .ToList());
         return result;
     }
+    public bool CheckSubarraySum(int[] nums, int k)
+    {
+        int sum = nums.Sum();
+        int mod = sum % k;
+        foreach(var n in  nums)
+        {
+            if (n % k == mod)
+                return true;
+        }
+        return false;
+        //unsolved
+    }
+    public int[] DeckRevealedIncreasing(int[] deck)
+    {
+        Array.Sort(deck);
+        var n = deck.Length;
+        var ans = new int[n];
+        var q = new Queue<int>(Enumerable.Range(0, n));
 
+        for (var i = 0; i < n; i++)
+        {
+            ans[q.Dequeue()] = deck[i];
+            if (q.Count > 0)
+            {
+                q.Enqueue(q.Dequeue());
+            }
+        }
+
+        return ans;
+        //unsolved
+    }
+    public int MinimumLength(string s)
+    {
+        int left = 0;
+        int right = s.Length-1;
+        char current = s[0];
+        while(left < right)
+        {
+            while (s[left] == s[left+1])
+            {
+                left++;
+                current = s[left];
+            }
+            while (s[right] == current)
+            {
+                right--;
+            }
+        }
+        return right - left;
+        //unsolved
+    }
+
+    public string RemoveKdigits(string num, int k)
+    {
+        int i = 0;
+        while(k > 0 && i < num.Length-1)
+        {
+            if (num[i] > num[i+1])
+            {
+                num = num.Remove(i, 1);
+                k--;
+            }
+            else
+            {
+                i++;
+            }
+        }
+        if(k>0)
+        {
+            i = num.Length - 1;
+            while(k>0)
+            {
+                num = num.Remove(i, 1);
+                k--;
+            }
+        }
+        while(num.Length >1 && num[0] == '0')
+        {
+            num = num.Remove(0, 1);
+        }
+        return num == String.Empty ? "0" : num;
+        //unsolved
+    }
+    public bool JudgeSquareSum(int c)
+    {
+        int left = 0;
+        int right = (int)Math.Sqrt(c);
+        while(left <= right)
+        {
+            int sum = left * left + right * right;
+            if (sum == c) return true;
+            if(sum < c) left ++;
+            if (sum > c) right--;
+        }
+        return false;
+        //edge case unsolved
+    }
+    public int Trap(int[] height)
+    {
+        int sum = 0;
+        int[] maxLeft = new int[height.Length];
+        int[] maxRight = new int[height.Length];
+        maxLeft[0] = height[0];
+        maxRight[height.Length-1] = height[height.Length-1];
+        for(int i =1;i < height.Length;i++)
+        {
+            if (height[i] >= maxLeft[i-1]) 
+                maxLeft[i] = height[i];
+            else maxLeft[i] = maxLeft[i-1];
+            if (height[height.Length - 1 - i] >= maxRight[height.Length  - i])
+                maxRight[height.Length - 1 - i] = height[height.Length - 1 - i];
+            else maxRight[height.Length - 1 - i] = maxRight[height.Length - i];
+        }
+        for(int i =0;i < height.Length; i++)
+        {
+            sum += Math.Min(maxLeft[i], maxRight[i]) - height[i];
+        }
+        return sum;
+        //solved
+        //12/4/2024 daily
+    }
     public static void Main()
     {
-        
-
-        Solution solution = new Solution();
-        int[] nums = new int[] {1,2 };
-        IList<int> result = solution.MajorityElement(nums);
-        foreach(var x in result)
-        {
-            Console.WriteLine(x);
-        }
+        Solution slt = new Solution();
+        int k = slt.Trap(new int[]{ 4, 2, 0, 3, 2, 5 });
+        Console.WriteLine(k);
     }
 }

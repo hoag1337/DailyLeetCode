@@ -1388,10 +1388,30 @@ public class Solution
         //solved
         //12/4/2024 daily
     }
+
+    public int NumIslands(char[][] grid)
+    {
+        int count = 0;
+        
+        return count;
+    }
+    public string ReversePrefix(string word, char ch)
+    {
+        int first = word.IndexOf(ch);
+        if (first == -1)
+        {
+            return word;
+        }
+        else
+        {
+            string res = word.Substring(0, first+1);
+            return new string(res.Reverse().ToArray()) + word.Substring(first+1);
+        }
+    }
     public static void Main()
     {
         Solution slt = new Solution();
-        int k = slt.Trap(new int[]{ 4, 2, 0, 3, 2, 5 });
+        string k = slt.ReversePrefix("xyxzxe", 'z');
         Console.WriteLine(k);
     }
 }

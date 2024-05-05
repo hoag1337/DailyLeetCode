@@ -1408,10 +1408,43 @@ public class Solution
             return new string(res.Reverse().ToArray()) + word.Substring(first+1);
         }
     }
+
+    public int NumRescueBoats(int[] people, int limit)
+    {
+        Array.Sort(people);
+        int count = 0;
+        int left = 0;
+        int right = people.Length - 1;
+        while(left < right)
+        {
+            if (people[left] + people[right] <= limit) 
+            {
+                right--;
+                left++;
+                count++;
+            }
+            else
+            {
+                right--;
+                count++;
+            }
+        }
+        return count;
+    }
+    public int FindMaxK(int[] nums)
+    {
+        //HashSet<int> result = new HashSet<int>();
+        //for(int i =0;i < nums.Length;i++)
+        //{
+        //    if             result.Add(nums[i]);
+        //}
+        return 0;
+    }
     public static void Main()
     {
         Solution slt = new Solution();
-        string k = slt.ReversePrefix("xyxzxe", 'z');
-        Console.WriteLine(k);
+        int[] array = { 5, 2, 4, 1, 1, 4, 64, 3, 7, 8, 45, 1, 1, 1 };
+        BucketSort(array);
+        Console.ReadKey();
     }
 }

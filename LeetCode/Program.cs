@@ -1440,11 +1440,56 @@ public class Solution
         //}
         return 0;
     }
+    public string[] FindRelativeRanks(int[] score)
+    {
+        var scoreDict = new Dictionary<int, int>();
+        //store the indices and the values in the dictionary
+        for (int i = 0; i < score.Length; i++)
+        {
+            scoreDict[score[i]] = i;
+        }
+        ///sort the input array in descending order
+        Array.Sort(score, (x, y) => y.CompareTo(x));
+        string[] result = new string[score.Length];
+        // traverse from 0 to input length to store the ranks
+        for (int i = 0; i < score.Length; i++)
+        {
+            //assign rank based on the position after the sorting
+            if (i == 0)
+            {
+                result[scoreDict[score[i]]] = "Gold Medal";
+            }
+            else if (i == 1)
+            {
+                result[scoreDict[score[i]]] = "Silver Medal";
+            }
+            else if (i == 2)
+            {
+                result[scoreDict[score[i]]] = "Bronze Medal";
+            }
+            else
+            {
+                result[scoreDict[score[i]]] = (i + 1).ToString();
+            }
+        }
+        return result;
+    }
+    public static long MaximumHappinessSum(int[] happiness, int k)
+    {
+        int i = happiness.Length - 1;
+        long count = 0;
+        Array.Sort(happiness);
+        while(k > 0)
+        {
+            count += happiness[i] - (happiness.Length-1 - i) < 0 ? 0 : happiness[i] - (happiness.Length - i - 1);
+            i--;
+            k--;
+        }
+        return count;
+    }
     public static void Main()
     {
-        Solution slt = new Solution();
-        int[] array = { 5, 2, 4, 1, 1, 4, 64, 3, 7, 8, 45, 1, 1, 1 };
-        BucketSort(array);
-        Console.ReadKey();
+        long num = MaximumHappinessSum(new int[] { 2, 3, 4, 5 }, 1);
+        Console.WriteLine(num);
     }
 }

@@ -2,6 +2,7 @@
 using System.Numerics;
 using System.Security.Principal;
 using System.Text;
+using System.Text.Json.Serialization.Metadata;
 
 
 
@@ -880,7 +881,7 @@ public class Solution
         }
         return true;
     }
-    
+
     public bool CheckPossibility(int[] nums)
     {
         int temp = nums[0];
@@ -1251,9 +1252,9 @@ public class Solution
     {
         List<int> result = new List<int>();
         Dictionary<int, int> dict = new Dictionary<int, int>();
-        foreach(int x in nums)
+        foreach (int x in nums)
         {
-            if(!dict.ContainsKey(x))
+            if (!dict.ContainsKey(x))
             {
                 dict[x] = 1;
             }
@@ -1271,7 +1272,7 @@ public class Solution
     {
         int sum = nums.Sum();
         int mod = sum % k;
-        foreach(var n in  nums)
+        foreach (var n in nums)
         {
             if (n % k == mod)
                 return true;
@@ -1301,11 +1302,11 @@ public class Solution
     public int MinimumLength(string s)
     {
         int left = 0;
-        int right = s.Length-1;
+        int right = s.Length - 1;
         char current = s[0];
-        while(left < right)
+        while (left < right)
         {
-            while (s[left] == s[left+1])
+            while (s[left] == s[left + 1])
             {
                 left++;
                 current = s[left];
@@ -1322,9 +1323,9 @@ public class Solution
     public string RemoveKdigits(string num, int k)
     {
         int i = 0;
-        while(k > 0 && i < num.Length-1)
+        while (k > 0 && i < num.Length - 1)
         {
-            if (num[i] > num[i+1])
+            if (num[i] > num[i + 1])
             {
                 num = num.Remove(i, 1);
                 k--;
@@ -1334,16 +1335,16 @@ public class Solution
                 i++;
             }
         }
-        if(k>0)
+        if (k > 0)
         {
             i = num.Length - 1;
-            while(k>0)
+            while (k > 0)
             {
                 num = num.Remove(i, 1);
                 k--;
             }
         }
-        while(num.Length >1 && num[0] == '0')
+        while (num.Length > 1 && num[0] == '0')
         {
             num = num.Remove(0, 1);
         }
@@ -1354,11 +1355,11 @@ public class Solution
     {
         int left = 0;
         int right = (int)Math.Sqrt(c);
-        while(left <= right)
+        while (left <= right)
         {
             int sum = left * left + right * right;
             if (sum == c) return true;
-            if(sum < c) left ++;
+            if (sum < c) left++;
             if (sum > c) right--;
         }
         return false;
@@ -1370,17 +1371,17 @@ public class Solution
         int[] maxLeft = new int[height.Length];
         int[] maxRight = new int[height.Length];
         maxLeft[0] = height[0];
-        maxRight[height.Length-1] = height[height.Length-1];
-        for(int i =1;i < height.Length;i++)
+        maxRight[height.Length - 1] = height[height.Length - 1];
+        for (int i = 1; i < height.Length; i++)
         {
-            if (height[i] >= maxLeft[i-1]) 
+            if (height[i] >= maxLeft[i - 1])
                 maxLeft[i] = height[i];
-            else maxLeft[i] = maxLeft[i-1];
-            if (height[height.Length - 1 - i] >= maxRight[height.Length  - i])
+            else maxLeft[i] = maxLeft[i - 1];
+            if (height[height.Length - 1 - i] >= maxRight[height.Length - i])
                 maxRight[height.Length - 1 - i] = height[height.Length - 1 - i];
             else maxRight[height.Length - 1 - i] = maxRight[height.Length - i];
         }
-        for(int i =0;i < height.Length; i++)
+        for (int i = 0; i < height.Length; i++)
         {
             sum += Math.Min(maxLeft[i], maxRight[i]) - height[i];
         }
@@ -1392,7 +1393,7 @@ public class Solution
     public int NumIslands(char[][] grid)
     {
         int count = 0;
-        
+
         return count;
     }
     public string ReversePrefix(string word, char ch)
@@ -1404,8 +1405,8 @@ public class Solution
         }
         else
         {
-            string res = word.Substring(0, first+1);
-            return new string(res.Reverse().ToArray()) + word.Substring(first+1);
+            string res = word.Substring(0, first + 1);
+            return new string(res.Reverse().ToArray()) + word.Substring(first + 1);
         }
     }
 
@@ -1415,9 +1416,9 @@ public class Solution
         int count = 0;
         int left = 0;
         int right = people.Length - 1;
-        while(left < right)
+        while (left < right)
         {
-            if (people[left] + people[right] <= limit) 
+            if (people[left] + people[right] <= limit)
             {
                 right--;
                 left++;
@@ -1479,17 +1480,103 @@ public class Solution
         int i = happiness.Length - 1;
         long count = 0;
         Array.Sort(happiness);
-        while(k > 0)
+        while (k > 0)
         {
-            count += happiness[i] - (happiness.Length-1 - i) < 0 ? 0 : happiness[i] - (happiness.Length - i - 1);
+            count += happiness[i] - (happiness.Length - 1 - i) < 0 ? 0 : happiness[i] - (happiness.Length - i - 1);
             i--;
             k--;
         }
         return count;
     }
+
+    public static IList<int> GoodIndices(int[] nums, int k)
+    {
+        List<int> result = new List<int>();
+        int[] ascStreak = new int[nums.Length];
+        int min = nums[0];
+        int current = 0;
+        for(int i =0;i < nums.Length;i++)
+        {
+            if (nums[i] <= min)
+            {
+                min = nums[i];
+                current++;
+            }
+            else
+            {
+                min = nums[i];
+                current = 1;
+            }
+            ascStreak[i] = current;
+        }
+        int max = nums[nums.Length - 1];
+        int[] desStreak = new int[nums.Length];
+        current = 0;
+        for (int i = nums.Length-1; i >=0; i--)
+        {
+            if (nums[i] <= max)
+            {
+                max = nums[i];
+                current++;
+            }
+            else
+            {
+                max = nums[i];
+                current = 1;
+            }
+            desStreak[i] = current;
+        }
+        for(int i = 1;i < nums.Length-1;i++)
+        {
+            if (ascStreak[i-1] >= k && desStreak[i+1] >= k)
+                result.Add(i);
+        }
+        return result;
+    }
+
+    public static void SwapRow(int[][] grid, int row)
+    {
+        for (int i = 1; i < grid[0].Length; i++)
+        {
+            if (grid[row][i] == 0) grid[row][i] = 1;
+            else
+            {
+                grid[row][i] = 0;
+            }
+        }
+    }
+    public int MatrixScore(int[][] grid)
+    {
+        double sum = 0;
+        int m = grid.Length;
+        int n = grid[0].Length;
+        for (int i = 0; i < m; i++)
+        {
+            if (grid[i][0] == 0)
+            {
+                SwapRow(grid, i);
+            }
+        }
+        int[] count1s = new int[n];
+        count1s[0] = m;
+        sum += Math.Pow(2, n - 1) * m;
+        for (int i = 1; i < n; i++)
+        {
+            for (int j = 0; j < m; j++)
+            {
+                if (grid[j][i] == 1)
+                {
+                    count1s[i]++;
+                }
+            }
+            int c = count1s[i] > m - count1s[i] ? count1s[i] : m - count1s[i];
+            sum += Math.Pow(2, n - 1 - i) * c;
+        }
+
+        return (int)sum;
+    }
     public static void Main()
     {
-        long num = MaximumHappinessSum(new int[] { 2, 3, 4, 5 }, 1);
-        Console.WriteLine(num);
+    
     }
 }
